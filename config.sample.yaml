@@ -3,7 +3,13 @@ clients:
     password: "verystronkone"
     homeserverurl: "dendrite.maibaloc.com"
     clienttype: "matrix"
-nlu:
+
+nluclients:
   - service: diaglogflow
     projectID: "yuta-seig"
     sessionID: "test"
+
+server:
+  host: "0.0.0.0"
+  port: "8000"
+  timeout: 15

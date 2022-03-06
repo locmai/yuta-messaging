@@ -30,8 +30,18 @@ type ClientConfig struct {
 	ClientType ClientType `yaml:"clienttype"`
 }
 
+type ServerConfig struct {
+	// The chat platform's username to connect with
+	Host string `yaml:"host"`
+	// The password to authenticate the requests with.
+	Port string `yaml:"port"`
+	// The access token to authenticate the requests with.
+	Timeout int `yaml:"timeout"`
+}
+
 type ConfigFile struct {
 	Clients []ClientConfig `yaml:"clients"`
+	Server  ServerConfig   `yaml:"server"`
 }
 
 // Check that the client has supplied the correct fields.

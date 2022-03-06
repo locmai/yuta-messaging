@@ -31,11 +31,11 @@ type ClientConfig struct {
 }
 
 type ServerConfig struct {
-	// The chat platform's username to connect with
+	// The host which the server run on
 	Host string `yaml:"host"`
-	// The password to authenticate the requests with.
+	// The port which the server run on
 	Port string `yaml:"port"`
-	// The access token to authenticate the requests with.
+	// Timeout for both read and write operations
 	Timeout int `yaml:"timeout"`
 }
 

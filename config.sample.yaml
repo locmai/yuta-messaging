@@ -1,0 +1,9 @@
+clients:
+  - username: "yuta"
+    password: "verystronkone"
+    homeserverurl: "dendrite.maibaloc.com"
+    clienttype: "matrix"
+nlu:
+  - service: diaglogflow
+    projectID: "yuta-seig"
+    sessionID: "test"

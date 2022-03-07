@@ -30,6 +30,13 @@ type ClientConfig struct {
 	ClientType ClientType `yaml:"clienttype"`
 }
 
+type NluClientType string
+
+const (
+	DiaglogflowClientType NluClientType = "diaglog"
+	LuisClientType        NluClientType = "luis"
+)
+
 type ServerConfig struct {
 	// The host which the server run on
 	Host string `yaml:"host"`
@@ -39,9 +46,15 @@ type ServerConfig struct {
 	Timeout int `yaml:"timeout"`
 }
 
+type NluClientConfig struct {
+	projectID string `yaml:"projectid"`
+	sessionID string `yaml:"sessionid"`
+}
+
 type ConfigFile struct {
-	Clients []ClientConfig `yaml:"clients"`
-	Server  ServerConfig   `yaml:"server"`
+	Server     ServerConfig      `yaml:"server"`
+	Clients    []ClientConfig    `yaml:"clients"`
+	NluClients []NluClientConfig `yaml:"nluclients"`
 }
 
 // Check that the client has supplied the correct fields.

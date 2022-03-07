@@ -49,11 +49,11 @@ func main() {
 				if evt.Sender == "@locmai:dendrite.maibaloc.com" && evt.Timestamp > serverStartTime {
 					fmt.Printf("<%[1]s> %[4]s (%[2]s/%[3]s)\n", evt.Sender, evt.Type.String(), evt.ID, evt.Content.AsMessage().Body)
 
-					fulfillmentText, err := DetectIntentText("yuta-seig", "test", evt.Content.AsMessage().Body)
+					_, action, err := DetectIntentText("yuta-seig", "test", evt.Content.AsMessage().Body)
 					if err != nil {
 						panic(err)
 					}
-					botClient.Client.SendText(evt.RoomID, fulfillmentText)
+					botClient.Client.SendText(evt.RoomID, action)
 				}
 			})
 			go botClient.Client.Sync()
@@ -68,18 +68,18 @@ func main() {
 	logrus.Fatal(srv.ListenAndServe())
 }
 
-func DetectIntentText(projectID, sessionID, text string) (string, error) {
+func DetectIntentText(projectID, sessionID, text string) (string, string, error) {
 	ctx := context.Background()
 	languageCode := "en-US"
 
 	sessionClient, err := dialogflow.NewSessionsClient(ctx)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	defer sessionClient.Close()
 
 	if projectID == "" || sessionID == "" {
-		return "", fmt.Errorf("received empty project (%s) or session (%s)", projectID, sessionID)
+		return "", "", fmt.Errorf("received empty project (%s) or session (%s)", projectID, sessionID)
 	}
 
 	sessionPath := fmt.Sprintf("projects/%s/agent/sessions/%s", projectID, sessionID)
@@ -90,10 +90,11 @@ func DetectIntentText(projectID, sessionID, text string) (string, error) {
 
 	response, err := sessionClient.DetectIntent(ctx, &request)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	queryResult := response.GetQueryResult()
 	fulfillmentText := queryResult.GetFulfillmentText()
-	return fulfillmentText, nil
+	actionDetected := queryResult.Action
+	return fulfillmentText, actionDetected, nil
 }
